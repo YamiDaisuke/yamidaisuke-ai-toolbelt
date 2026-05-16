@@ -8,11 +8,11 @@
 
 {VISION_AND_PROBLEM_STATEMENT}
 
-## Target Users & Stakeholders
+## Target Users
 
-<!-- Who uses it directly? Who is affected? Who has approval authority? -->
+<!-- Who is this for? What are they trying to accomplish? -->
 
-{TARGET_USERS_AND_STAKEHOLDERS}
+{TARGET_USERS}
 
 ## Functional Requirements
 
