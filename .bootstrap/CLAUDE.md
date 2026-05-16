@@ -1,7 +1,8 @@
 # CLAUDE.md
 
-Behavioral guidelines for building and maintaining this bootstrap system.
-This repo IS the skeleton — every file you create here will be copied into future projects.
+Behavioral guidelines for {PROJECT_NAME}.
+
+<!-- Replace {PROJECT_NAME} with the project name. Fill in sections 5–7 after bootstrapping. -->
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
@@ -59,53 +60,47 @@ Wait for confirmation on the plan before writing any file.
 
 -----
 
-## 5. What This Repo Is
+## 5. Project Context
 
-A reusable bootstrap skeleton for spec-driven development with agent roles.
-It is not a runnable application. The deliverables are text files — markdown, bash scripts, and templates.
+<!-- What is this project? What problem does it solve? What are the key constraints? -->
 
-```
-.bootstrap/
-├── agents/          # Role definitions (architect, scrum-master, developer, code-reviewer, qa)
-├── skills/          # Skill guides used by each agent
-├── scripts/         # Bash scripts: bootstrap.sh, new-spec.sh, next-task.sh, qa-report.sh
-└── templates/       # Blank starting templates: REQUIREMENTS.md, ARCHITECTURE.md, SPEC.md
+{PROJECT_DESCRIPTION}
 
-CLAUDE.md            # This file — also the template shipped to new projects (see note below)
-```
+## 6. Roles & Documents
 
-Reference document: `docs/bootstrap-skeleton.md` is the source of truth for what gets built.
-Do not add files not described there without explicit approval.
+### Roles active in this repo
+- Architect: see .bootstrap/agents/architect.md
+- Scrum Master: see .bootstrap/agents/scrum-master.md
+- Developer: see .bootstrap/agents/developer.md
+- Code Reviewer: see .bootstrap/agents/code-reviewer.md
+- QA: see .bootstrap/agents/qa.md
 
-## 6. The CLAUDE.md Duality
+### Key documents
+- Requirements: docs/REQUIREMENTS.md
+- Architecture: docs/ARCHITECTURE.md
+- Specs: docs/specs/*.md
 
-This file serves two purposes:
+### Current phase
+<!-- Update this as the project progresses -->
+[ ] Requirements
+[ ] Architecture
+[ ] Spec writing
+[ ] Development
+[ ] QA
 
-1. **Right now:** guides Claude Code while building this bootstrap repo.
-1. **When shipped:** copied into new projects via `bootstrap.sh` as their starting CLAUDE.md,
-   where sections 5–6 are replaced with project-specific context.
+## 7. Conventions
 
-Do not conflate the two. When editing this file, consider whether a change belongs here
-(bootstrap-build context) or in the shipped template (`templates/CLAUDE.md`).
+<!-- Short-form of ARCHITECTURE.md conventions for quick reference. Fill in after architecture is confirmed. -->
 
-## 7. File Authoring Rules
-
-These files will be read by Claude Code agents in future projects. Write them accordingly:
-
-- **Agent files** (`agents/*.md`): role definition first, then triggers, then behaviors, then skill refs.
-  Be prescriptive. Agents follow instructions literally — vague guidance produces vague behavior.
-- **Skill files** (`skills/*.md`): inputs → process (numbered steps) → output format. No prose padding.
-- **Scripts** (`scripts/*.sh`): include usage comment at top, keep logic minimal, exit with clear errors.
-- **Templates** (`templates/*.md`): placeholder tokens use `{UPPER_SNAKE_CASE}`. Every section that
-  must be filled in should have a one-line instruction comment.
+{CONVENTIONS_SUMMARY}
 
 ## 8. Definition of Done
 
-A file is done when:
+A task is done when:
 
-- It matches the spec in `docs/bootstrap-skeleton.md`
-- It could be handed to a Claude Code agent in a new project with no additional explanation
-- It contains no TODOs, placeholder logic, or "coming soon" stubs unless explicitly allowed
+- It satisfies all acceptance criteria in the spec
+- It could be handed to a Code Reviewer with no additional explanation
+- It contains no TODOs or incomplete implementations
 
 -----
 
