@@ -2,7 +2,7 @@
 
 Status: draft
 
-<!-- Replace {FEATURE_NAME} with the feature name. Update Status as work progresses: draft | in-progress | complete | accepted -->
+<!-- Replace {FEATURE_NAME} with the feature name. Update Status as work progresses: draft | in-progress | done -->
 
 ## Overview
 
@@ -24,7 +24,7 @@ Status: draft
 
 ## Tasks
 
-<!-- Each task must be atomic: completable in one sitting, reviewable independently. -->
+<!-- Each task must be atomic and scoped to 1-2 hours of human dev work. Prefer more short tasks over fewer large ones. -->
 
 ### TASK-01: {TASK_TITLE}
 
@@ -34,3 +34,15 @@ Status: draft
 - [ ] {ACCEPTANCE_CRITERION}
 
 **Status:** todo
+
+<!-- Status values: todo | in-progress | done. A task stays in-progress as long as any work remains (dev, QA, bug fixing). -->
+
+---
+
+## Ticket Tracker
+
+<!-- Map each task to its ID in your ticket tracking system. -->
+
+| Task | Ticket ID |
+|------|-----------|
+| TASK-01 | {TICKET_ID} |
