@@ -3,7 +3,7 @@
 **Used by:** QA
 
 **Inputs:**
-- The completed spec file (all tasks `approved`)
+- The completed spec file (all tasks `done`)
 - `docs/REQUIREMENTS.md`
 - The codebase
 
@@ -20,10 +20,10 @@
 ## Output
 
 **ACCEPTED**
-Notify Scrum Master to mark spec `accepted`.
+Notify Scrum Master to mark spec `done`.
 
 **BUG REPORT**
-One task stub per failure, ready for Scrum Master injection:
+One task stub per failure, sent to Scrum Master for formatting, ticket creation, and assignment:
 
     ### TASK-XX: {short title}
     **Description:** What failed and why.
