@@ -22,7 +22,7 @@
 │   ├── code-review.md
 │   └── qa-check.md
 ├── scripts/
-│   ├── bootstrap.sh          # Init a new repo from this skeleton
+│   ├── bootstrap.sh          # Remote install via curl, clones repo, sets up project
 │   ├── new-spec.sh           # Scaffold a new spec file
 │   ├── next-task.sh          # Print next incomplete task across specs
 │   └── qa-report.sh          # Aggregate QA status across specs
@@ -30,12 +30,12 @@
 │   ├── REQUIREMENTS.md
 │   ├── ARCHITECTURE.md
 │   └── SPEC.md
-└── CLAUDE.md                 # Context file for Claude Code sessions
+└── CLAUDE.md                 # Generic project template for Claude Code sessions
 ```
 
 ```
 {project-repo}/
-├── .bootstrap/               # Symlink or copy of the above
+├── .bootstrap/               # Copied from skeleton by bootstrap.sh
 ├── docs/
 │   ├── REQUIREMENTS.md       # Generated
 │   ├── ARCHITECTURE.md       # Generated
@@ -43,8 +43,22 @@
 │       ├── feature-auth.md
 │       ├── feature-billing.md
 │       └── ...
-└── CLAUDE.md                 # Project-level Claude Code context
+└── CLAUDE.md                 # Project-level Claude Code context (from template)
 ```
+
+-----
+
+## Task Status Values
+
+Tasks use three statuses only:
+
+| Status | Meaning |
+|---|---|
+| `todo` | Not started |
+| `in-progress` | Any work pending — dev, review, QA, bug fixing |
+| `done` | Approved by Code Reviewer, all criteria met |
+
+Spec-level status: `draft | in-progress | done`
 
 -----
 
@@ -58,8 +72,8 @@ during development.
 
 **Triggers:**
 
-- Start of project (requirements phase)
-- After requirements complete (architecture phase)
+- Start of project → begin requirements session
+- Requirements confirmed → begin architecture session
 - Called by Scrum Master during spec writing for technical constraints
 
 **Core behaviors:**
@@ -68,6 +82,8 @@ during development.
 - Summarizes what was captured before moving to the next section
 - Flags conflicts or ambiguities immediately
 - Writes output to docs/ only when the user confirms a section is done
+- Never decides for the user — flags issues, offers alternatives with tradeoffs, asks how to proceed
+- Never assigns tasks. Never writes implementation code.
 
 **Skill refs:** `requirements-interview`, `architecture-interview`
 
@@ -76,20 +92,24 @@ during development.
 ### 🗂️ Scrum Master
 
 **Role:** Flow orchestrator. Breaks requirements into features, coordinates
-spec writing, assigns tasks to Developer, tracks completion, triggers QA.
+spec writing, assigns tasks to Developer one at a time, tracks completion,
+and signals when a spec is ready for QA.
 
 **Triggers:**
 
-- After ARCHITECTURE.md is written
-- After each task is approved by Code Reviewer
-- After all tasks in a spec are complete (triggers QA)
+- `ARCHITECTURE.md` confirmed → propose feature breakdown, begin spec writing
+- Task marked `done` by Developer → assign next task
+- All tasks in a spec reach `done` → notify User that spec is ready for QA
+- Bug report received from QA → format each bug as a task, add to spec, assign to Developer
 
 **Core behaviors:**
 
-- Maintains a simple task board (status fields in spec files)
-- Assigns one task at a time to Developer
-- Escalates blockers to Architect or User
-- Never writes code, never reviews code
+- Proposes feature breakdown from REQUIREMENTS.md and confirms with User before writing any spec
+- Maintains task status in spec files. Never tracks state outside the spec.
+- Assigns one task at a time. Does not assign next until current is `done`.
+- Escalates blockers to Architect (technical) or User (scope/priority)
+- Never decides for the user — presents options with tradeoffs and asks
+- Never writes code. Never reviews code.
 
 **Skill refs:** `spec-writer`, `task-runner`
 
@@ -98,18 +118,21 @@ spec writing, assigns tasks to Developer, tracks completion, triggers QA.
 ### 💻 Developer
 
 **Role:** Implementation. Receives one atomic task at a time, implements it,
-submits for review, iterates on feedback.
+iterates through review until approved, then marks done.
 
 **Triggers:**
 
-- Task assigned by Scrum Master
+- Task assigned by Scrum Master with status `todo`
 
 **Core behaviors:**
 
-- Reads the full spec before starting any task
-- Reads ARCHITECTURE.md for conventions
-- Commits after each task, never bundles unrelated changes
-- Marks task as `in-review` before submitting
+- Reads the full spec and ARCHITECTURE.md before starting any task
+- Marks task `in-progress` on start; it stays `in-progress` through the review cycle
+- Implements only what the task's acceptance criteria require
+- Asks Code Reviewer for approval when ready; iterates on feedback until approved
+- Marks task `done` and notifies Scrum Master only after Code Reviewer approves
+- Never makes architectural decisions — escalates to Architect if ARCHITECTURE.md doesn't cover it
+- Commits after each task. Never bundles changes from multiple tasks.
 
 **Skill refs:** `task-runner`
 
@@ -117,12 +140,12 @@ submits for review, iterates on feedback.
 
 ### 🔍 Code Reviewer
 
-**Role:** Quality gate before merge. Reviews each task implementation against
-the spec's acceptance criteria and ARCHITECTURE.md conventions.
+**Role:** Quality gate. Reviews each task implementation against the spec's
+acceptance criteria and ARCHITECTURE.md conventions.
 
 **Triggers:**
 
-- Developer submits a completed task
+- Developer asks for approval on a completed task
 
 **Review checklist:**
 
@@ -131,8 +154,9 @@ the spec's acceptance criteria and ARCHITECTURE.md conventions.
 - Are there obvious bugs, security issues, or performance concerns?
 - Is test coverage present where required?
 
-**Output:** `PASS` (notifies Scrum Master) or `FEEDBACK` (returned to Developer
-with specific, actionable comments referencing line numbers and spec criteria).
+**Output:** `PASS` (notifies Developer, who marks task `done` and notifies Scrum Master)
+or `FEEDBACK` (returned to Developer with specific, actionable comments referencing
+line numbers and spec criteria).
 
 **Skill refs:** `code-review`
 
@@ -140,13 +164,12 @@ with specific, actionable comments referencing line numbers and spec criteria).
 
 ### ✅ QA
 
-**Role:** Feature acceptance gate. Runs after all tasks in a spec are
-Developer-approved. Tests the full feature against functional and
-non-functional requirements.
+**Role:** Feature acceptance gate. Runs after all tasks in a spec are `done`.
+Tests the full feature against functional and non-functional requirements.
 
 **Triggers:**
 
-- Scrum Master signals all spec tasks are `approved`
+- Scrum Master signals all spec tasks are `done`
 
 **QA checklist:**
 
@@ -155,8 +178,8 @@ non-functional requirements.
 - Edge cases and error states covered?
 - Non-functional requirements met (perf, a11y, security as applicable)?
 
-**Output:** `ACCEPTED` (Scrum Master marks spec complete) or `BUG REPORT`
-(filed as new tasks back to Developer, with spec references).
+**Output:** `ACCEPTED` (Scrum Master marks spec `done`) or `BUG REPORT`
+(sent to Scrum Master, who formats each bug as a task, adds to spec, and assigns it).
 
 **Skill refs:** `qa-check`
 
@@ -171,7 +194,7 @@ Guides the Architect through a structured requirements session.
 **Sections (in order):**
 
 1. Project vision & problem statement
-1. Target users & stakeholders
+1. Target users
 1. Functional requirements (what the system does)
 1. Non-functional requirements (perf, security, scale, a11y)
 1. Out of scope
@@ -182,6 +205,7 @@ Guides the Architect through a structured requirements session.
 
 - One section at a time
 - Summarize what was captured, ask "does this look right?" before continuing
+- If the user's answer raises a concern, flag it before writing — explain the issue, offer alternatives, ask how to proceed
 - Generate a draft section in REQUIREMENTS template format only after confirmation
 - Never skip sections; offer to mark a section as TBD if the user is unsure
 
@@ -203,7 +227,7 @@ REQUIREMENTS.md as input context.
 1. Deployment & environments
 1. Conventions & style rules (naming, error handling, logging)
 
-**Rules:** Same as `requirements-interview` — one section, confirm, write.
+**Rules:** Same as `requirements-interview` — one section, confirm, flag concerns, write.
 
 -----
 
@@ -215,14 +239,13 @@ Used by Scrum Master to produce a spec file for one feature.
 
 ```
 # Spec: {Feature Name}
-Status: draft | in-progress | complete | accepted
+Status: draft
 
 ## Overview
 One-paragraph summary of the feature.
 
 ## Functional Requirements
 - FR-01: ...
-- FR-02: ...
 
 ## Technical Requirements
 - TR-01: (references ARCHITECTURE.md sections as needed)
@@ -232,16 +255,41 @@ One-paragraph summary of the feature.
 **Description:** ...
 **Acceptance Criteria:**
 - [ ] ...
-**Status:** todo | in-progress | in-review | approved
+**Status:** todo
 
-### TASK-02: ...
+## Ticket Tracker
+| Task    | Ticket ID   |
+|---------|-------------|
+| TASK-01 | {TICKET_ID} |
 ```
 
 **Rules:**
 
-- Tasks must be atomic (completable in one sitting, reviewable independently)
+- Tasks must be atomic, 1-2 hours of human dev work. Prefer more short tasks over fewer large ones.
 - Each task has explicit, testable acceptance criteria
 - Scrum Master confirms the task list with User before writing the file
+- After writing the spec, create a ticket in the tracking system for each task and populate the Ticket Tracker table
+
+-----
+
+### `task-runner`
+
+Used by Developer (executing) and Scrum Master (assigning).
+
+**Developer process:**
+
+1. Read the full spec and ARCHITECTURE.md
+2. Mark task `in-progress`
+3. Implement only what the acceptance criteria require
+4. Ask Code Reviewer for approval
+   - If approved → mark `done`, commit, notify Scrum Master
+   - If feedback → address comments, ask again. Repeat until approved.
+
+**Scrum Master process:**
+
+1. Find next task with status `todo`
+2. Assign to Developer with spec path and task ID
+3. Do not assign another until current is `done`
 
 -----
 
@@ -253,7 +301,8 @@ Used by Code Reviewer. Structured review against spec and architecture.
 **Outputs:** Structured feedback with:
 
 - Verdict: PASS or FEEDBACK
-- If FEEDBACK: numbered list of issues, each with file+line ref and spec criteria ref
+- PASS: notify Developer — task is approved
+- FEEDBACK: numbered list of issues, each with file+line ref and spec criteria ref
 - No vague comments — every issue must be actionable
 
 -----
@@ -262,14 +311,15 @@ Used by Code Reviewer. Structured review against spec and architecture.
 
 Used by QA agent. Tests a completed spec.
 
-**Inputs:** spec file, REQUIREMENTS.md, codebase
+**Inputs:** spec file (all tasks `done`), REQUIREMENTS.md, codebase
 **Process:**
 
 1. List all acceptance criteria across all tasks
 1. List all functional requirements that apply to this feature
 1. For each: PASS / FAIL / PARTIAL with notes
+1. Check edge cases, error states, and applicable non-functional requirements
 1. Summary verdict: ACCEPTED or BUG REPORT
-1. Bug report items are formatted as new task stubs (ready for Scrum Master to inject)
+1. Bug report stubs sent to Scrum Master for task creation, formatting, and assignment
 
 -----
 
@@ -277,30 +327,28 @@ Used by QA agent. Tests a completed spec.
 
 ### `bootstrap.sh`
 
-Initializes a new repository with this skeleton.
+Remote install — downloads and applies the skeleton to a new project.
 
 ```bash
-#!/bin/bash
-# Usage: ./bootstrap.sh <project-name>
+# Usage: curl -fsSL <raw-url> | bash -s -- <project-name>
+# - Clones bootstrap repo to a temp directory (cleaned up on exit)
+# - Copies .bootstrap/ into the current directory
 # - Creates docs/REQUIREMENTS.md, docs/ARCHITECTURE.md from templates
 # - Creates docs/specs/ directory
-# - Writes CLAUDE.md pointing to docs/
+# - Writes CLAUDE.md from template with project name substituted
 # - Initializes git if not already a repo
 ```
 
 ### `new-spec.sh`
 
 ```bash
-#!/bin/bash
 # Usage: ./new-spec.sh <feature-slug>
 # - Creates docs/specs/<feature-slug>.md from SPEC.md template
-# - Adds status: draft header
 ```
 
 ### `next-task.sh`
 
 ```bash
-#!/bin/bash
 # Scans all specs in docs/specs/
 # Prints the first task with status: todo
 # Format: [spec-file] TASK-XX: description
@@ -309,7 +357,6 @@ Initializes a new repository with this skeleton.
 ### `qa-report.sh`
 
 ```bash
-#!/bin/bash
 # Scans all specs
 # Prints table: Spec | Tasks Done | Tasks Total | QA Status
 ```
@@ -318,51 +365,49 @@ Initializes a new repository with this skeleton.
 
 ## CLAUDE.md (project-level)
 
+Generic template with placeholders — written by `bootstrap.sh` with `{PROJECT_NAME}` substituted.
+`{PROJECT_DESCRIPTION}` and `{CONVENTIONS_SUMMARY}` are filled in during the project sessions.
+
 ```markdown
-# Project: {Name}
+# CLAUDE.md
 
-## Roles active in this repo
-- Architect: see .bootstrap/agents/architect.md
-- Scrum Master: see .bootstrap/agents/scrum-master.md
-- Developer: see .bootstrap/agents/developer.md
-- Code Reviewer: see .bootstrap/agents/code-reviewer.md
-- QA: see .bootstrap/agents/qa.md
+Behavioral guidelines for {PROJECT_NAME}.
 
-## Key documents
+## 1–4. Universal guidelines
+(Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)
+
+## 5. Project Context
+{PROJECT_DESCRIPTION}
+
+## 6. Roles & Documents
+- Roles: .bootstrap/agents/*.md
 - Requirements: docs/REQUIREMENTS.md
 - Architecture: docs/ARCHITECTURE.md
 - Specs: docs/specs/*.md
+- Current phase checklist
 
-## Current phase
-<!-- Update this as the project progresses -->
-[ ] Requirements
-[ ] Architecture
-[ ] Spec writing
-[ ] Development
-[ ] QA
+## 7. Conventions
+{CONVENTIONS_SUMMARY} — filled in after architecture is confirmed
 
-## Conventions (summary)
-<!-- Short-form of ARCHITECTURE.md conventions for quick reference -->
+## 8. Definition of Done
+A task is done when all acceptance criteria pass and Code Reviewer approves.
 ```
 
 -----
 
 ## Phase Sequence (Summary)
 
-|Phase       |Driver                  |Output         |Done When                   |
-|------------|------------------------|---------------|----------------------------|
-|Requirements|Architect               |REQUIREMENTS.md|User confirms all sections  |
-|Architecture|Architect               |ARCHITECTURE.md|User confirms all sections  |
-|Spec Writing|Scrum Master + Architect|docs/specs/*.md|All features have a spec    |
-|Development |Developer loop          |Code commits   |All tasks in spec = approved|
-|QA          |QA agent                |QA report      |All criteria pass → ACCEPTED|
+|Phase       |Driver                  |Output          |Done When                  |
+|------------|------------------------|----------------|---------------------------|
+|Requirements|Architect               |REQUIREMENTS.md |User confirms all sections |
+|Architecture|Architect               |ARCHITECTURE.md |User confirms all sections |
+|Spec Writing|Scrum Master + Architect|docs/specs/*.md |All features have a spec   |
+|Development |Developer loop          |Code commits    |All tasks in spec = `done` |
+|QA          |QA agent                |QA report       |All criteria pass → `done` |
 
 -----
 
 ## Open Questions (for you to decide)
 
-1. **Tooling for task status** — tracking task status as fields in markdown is simple but requires discipline. Do you want a lightweight JSON/YAML sidecar, or keep it in-file?
-1. **Multi-agent concurrency** — can multiple Developers work on different specs in parallel, or always serial?
 1. **Review strictness** — should Code Reviewer always block on missing tests, or is that configurable per spec?
 1. **Claude Code vs chat** — are Developer and Reviewer running as Claude Code agents (autonomous) or guided chat sessions?
-1. **Spec granularity** — do you want a rule for max tasks per spec (e.g. ≤10), or free-form?
