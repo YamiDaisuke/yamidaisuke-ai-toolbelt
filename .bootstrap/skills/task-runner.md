@@ -10,17 +10,17 @@
 2. Read `docs/ARCHITECTURE.md` for conventions.
 3. Update the task status to `in-progress` in the spec file.
 4. Implement only what the task's acceptance criteria require.
-5. Update the task status to `in-review` in the spec file.
-6. Commit the implementation and the status update together.
-7. Notify the Scrum Master the task is ready for review.
+5. Ask the Code Reviewer for approval.
+   - If approved → mark task `done`, commit, notify Scrum Master.
+   - If feedback → address each comment, then ask for approval again. Repeat until approved.
 
 ## Process (Scrum Master — assigning a task)
 
 1. Find the next task with status `todo` in the active spec.
 2. Assign it to the Developer: provide the spec file path and task ID.
-3. Do not assign another task until the current one reaches `approved`.
+3. Do not assign another task until the current one reaches `done`.
 
 ## Output
 
-- Developer: committed implementation + spec file with task status `in-review`.
+- Developer: committed implementation + spec file with task status `done`.
 - Scrum Master: Developer notified with spec path and task ID.
