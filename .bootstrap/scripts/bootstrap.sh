@@ -1,62 +1,44 @@
 #!/bin/bash
-# Usage: ./bootstrap.sh <project-name>
+# Usage: curl -fsSL <raw-url> | bash -s -- <project-name>
+# - Clones the bootstrap repo to a temp directory
+# - Copies .bootstrap/ into the current directory
 # - Creates docs/REQUIREMENTS.md, docs/ARCHITECTURE.md from templates
 # - Creates docs/specs/ directory
-# - Writes CLAUDE.md pointing to docs/
+# - Writes CLAUDE.md from template
 # - Initializes git if not already a repo
+# - Cleans up temp files on exit
 
 set -e
 
 if [ -z "$1" ]; then
   echo "Error: project name required"
-  echo "Usage: $0 <project-name>"
+  echo "Usage: curl -fsSL <raw-url> | bash -s -- <project-name>"
   exit 1
 fi
 
 PROJECT_NAME="$1"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TEMPLATES_DIR="$(dirname "$SCRIPT_DIR")/templates"
+REPO_URL="https://github.com/YamiDaisuke/yamidaisuke-ai-toolbelt"
+TEMP_DIR=$(mktemp -d)
 
-if [ ! -d "$TEMPLATES_DIR" ]; then
-  echo "Error: templates directory not found at $TEMPLATES_DIR"
-  exit 1
-fi
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+echo "Downloading bootstrap..."
+git clone --depth=1 --quiet "$REPO_URL" "$TEMP_DIR/repo"
+
+BOOTSTRAP_SRC="$TEMP_DIR/repo/.bootstrap"
 
 [ ! -d ".git" ] && git init
 
+cp -r "$BOOTSTRAP_SRC" .bootstrap
 mkdir -p docs/specs
 
-cp "$TEMPLATES_DIR/REQUIREMENTS.md" docs/REQUIREMENTS.md
-cp "$TEMPLATES_DIR/ARCHITECTURE.md" docs/ARCHITECTURE.md
+cp .bootstrap/templates/REQUIREMENTS.md docs/REQUIREMENTS.md
+cp .bootstrap/templates/ARCHITECTURE.md docs/ARCHITECTURE.md
 
-cat > CLAUDE.md <<EOF
-# Project: $PROJECT_NAME
-
-## Roles active in this repo
-- Architect: see .bootstrap/agents/architect.md
-- Scrum Master: see .bootstrap/agents/scrum-master.md
-- Developer: see .bootstrap/agents/developer.md
-- Code Reviewer: see .bootstrap/agents/code-reviewer.md
-- QA: see .bootstrap/agents/qa.md
-
-## Key documents
-- Requirements: docs/REQUIREMENTS.md
-- Architecture: docs/ARCHITECTURE.md
-- Specs: docs/specs/*.md
-
-## Current phase
-<!-- Update this as the project progresses -->
-[ ] Requirements
-[ ] Architecture
-[ ] Spec writing
-[ ] Development
-[ ] QA
-
-## Conventions (summary)
-<!-- Short-form of ARCHITECTURE.md conventions for quick reference -->
-EOF
+sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" .bootstrap/CLAUDE.md > CLAUDE.md
 
 echo "Bootstrapped: $PROJECT_NAME"
+echo "  .bootstrap/"
 echo "  docs/REQUIREMENTS.md"
 echo "  docs/ARCHITECTURE.md"
 echo "  docs/specs/"
