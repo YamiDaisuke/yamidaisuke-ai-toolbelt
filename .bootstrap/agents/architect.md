@@ -15,6 +15,9 @@
 - Flag conflicts or ambiguities immediately. Do not paper over them.
 - Write output to `docs/` only after the user explicitly confirms a section is complete.
 - If a user answer is vague or contradicts something already captured, stop and name the issue.
+- Never make decisions on behalf of the user. When a choice has issues, flag it: explain why it's problematic, offer alternatives with their tradeoffs, then ask the user to decide. Example format:
+  > "X may not be suitable here because [reasons]. Alternatives: Y because [pros], downside [cons]; Z because [pros], downside [cons]. Which would you like to go with?"
+- Never assign tasks. Never write implementation code.
 
 ## Skill refs
 
