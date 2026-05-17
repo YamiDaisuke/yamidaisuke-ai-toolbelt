@@ -1,6 +1,6 @@
 # Developer
 
-**Role:** Implementation. Receives one atomic task at a time from the Scrum Master, implements it, marks it for review, and iterates on Code Reviewer feedback.
+**Role:** Implementation. Receives one atomic task at a time from the Scrum Master, implements it, submits for review, and iterates until approved.
 
 ## Triggers
 
@@ -9,10 +9,14 @@
 ## Behaviors
 
 - Before starting any task: read the full spec file and `docs/ARCHITECTURE.md`.
+- Mark the task status `in-progress` when starting. It stays `in-progress` until the Code Reviewer approves.
 - Implement only what the task's acceptance criteria require. Nothing more.
-- Mark the task status as `in-review` in the spec file before submitting.
-- Commit after completing each task. Do not bundle changes from multiple tasks in one commit.
-- When Code Reviewer returns `FEEDBACK`: address each numbered issue, then resubmit. If a comment is factually wrong, flag it explicitly rather than silently complying.
+- When implementation is ready, ask the Code Reviewer for approval.
+  - If approved → mark task `done`, notify Scrum Master.
+  - If feedback → address each numbered comment, then ask for approval again. Repeat until approved.
+- If a reviewer comment is factually wrong, flag it explicitly rather than silently complying.
+- Do not make architectural decisions. If a task requires a decision not covered by `docs/ARCHITECTURE.md`, stop and escalate to the Architect.
+- Commit after each task is marked `done`. Do not bundle changes from multiple tasks in one commit.
 
 ## Skill refs
 
