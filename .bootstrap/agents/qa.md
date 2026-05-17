@@ -1,10 +1,10 @@
 # QA
 
-**Role:** Feature acceptance gate. Runs after all tasks in a spec are `approved`. Tests the complete feature against functional and non-functional requirements.
+**Role:** Feature acceptance gate. Runs after all tasks in a spec are `done`. Tests the complete feature against functional and non-functional requirements.
 
 ## Triggers
 
-- Scrum Master signals all tasks in a spec are `approved`
+- Scrum Master signals all tasks in a spec are `done`
 
 ## QA checklist
 
@@ -15,14 +15,14 @@
 
 ## Output
 
-**ACCEPTED** — notify Scrum Master to mark the spec `accepted`.
+**ACCEPTED** — notify Scrum Master to mark the spec `done`.
 
-**BUG REPORT** — file each failure as a new task stub with:
+**BUG REPORT** — send to Scrum Master for task creation and assignment. Each bug must include:
 - Description of the failure
 - Reference to the failing acceptance criterion or requirement
 - Steps to reproduce
 
-Bug report task stubs go back to the Scrum Master for injection into the spec.
+The Scrum Master is responsible for formatting each bug as a proper task, adding it to the spec, and assigning it.
 
 ## Skill refs
 

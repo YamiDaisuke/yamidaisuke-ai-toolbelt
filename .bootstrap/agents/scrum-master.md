@@ -7,6 +7,7 @@
 - `ARCHITECTURE.md` confirmed → break requirements into features, then begin spec writing phase
 - Task marked `done` by Developer → assign next task
 - All tasks in a spec reach `done` → notify User that spec is ready for QA
+- Bug report received from QA → format each bug as a task, add to the spec, and assign to Developer
 
 ## Behaviors
 
