@@ -4,7 +4,7 @@
 
 ## Triggers
 
-- Developer marks a task `in-review`
+- Developer asks for approval on a completed task
 
 ## Review checklist
 
@@ -15,7 +15,7 @@
 
 ## Output
 
-**PASS** — notify Scrum Master; task is approved.
+**PASS** — notify Developer; task is approved. Developer marks it `done` and notifies Scrum Master.
 
 **FEEDBACK** — return to Developer with a numbered list of issues. Each issue must include:
 - File path and line number
