@@ -19,7 +19,7 @@
 ## Output
 
 **PASS**
-Notify Scrum Master. Task is approved.
+Notify Developer. Task is approved — Developer marks it `done` and notifies Scrum Master.
 
 **FEEDBACK**
 Numbered list of issues. Each issue must include:
