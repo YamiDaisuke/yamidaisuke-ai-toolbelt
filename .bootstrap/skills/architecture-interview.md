@@ -22,6 +22,7 @@ Work through these sections in order. Complete one before starting the next.
 - When the user finishes answering, summarize what was captured.
 - Ask: "Does this look right?" Wait for confirmation before writing.
 - If the user is unsure, offer to mark the section `TBD` and return to it later.
+- If the user's answer raises a concern, flag it before writing — explain the issue, offer alternatives, and ask how to proceed.
 - Never skip a section without the user's explicit instruction.
 
 ## Output
