@@ -9,7 +9,7 @@
 Work through these sections in order. Complete one before starting the next.
 
 1. **Project vision & problem statement** — Ask: what problem does this solve, and for whom?
-2. **Target users & stakeholders** — Ask: who uses it directly, who is affected, who has approval authority?
+2. **Target users** — Ask: who is this for, and what are they trying to accomplish?
 3. **Functional requirements** — Ask: what must the system do? Capture as discrete, numbered items.
 4. **Non-functional requirements** — Ask: what constraints apply? (performance, security, scale, accessibility)
 5. **Out of scope** — Ask: what is explicitly not being built in this version?
@@ -21,6 +21,7 @@ Work through these sections in order. Complete one before starting the next.
 - When the user finishes answering, summarize what was captured.
 - Ask: "Does this look right?" Wait for confirmation before writing.
 - If the user is unsure, offer to mark the section `TBD` and return to it later.
+- If the user's answer raises a concern, flag it before writing — explain the issue, offer alternatives, and ask how to proceed.
 - Never skip a section without the user's explicit instruction.
 
 ## Output
