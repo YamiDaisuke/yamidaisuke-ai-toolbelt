@@ -30,15 +30,20 @@ BOOTSTRAP_SRC="$TEMP_DIR/repo/.bootstrap"
 [ ! -d ".git" ] && git init
 
 cp -r "$BOOTSTRAP_SRC" .bootstrap
-mkdir -p docs/specs
+mkdir -p docs/specs .claude/agents .claude/commands
 
 cp .bootstrap/templates/REQUIREMENTS.md docs/REQUIREMENTS.md
 cp .bootstrap/templates/ARCHITECTURE.md docs/ARCHITECTURE.md
+
+cp .bootstrap/agents/*.md .claude/agents/
+cp .bootstrap/skills/*.md .claude/commands/
 
 sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" .bootstrap/CLAUDE.md > CLAUDE.md
 
 echo "Bootstrapped: $PROJECT_NAME"
 echo "  .bootstrap/"
+echo "  .claude/agents/"
+echo "  .claude/commands/"
 echo "  docs/REQUIREMENTS.md"
 echo "  docs/ARCHITECTURE.md"
 echo "  docs/specs/"
