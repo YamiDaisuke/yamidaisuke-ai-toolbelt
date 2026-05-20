@@ -1,3 +1,7 @@
+---
+description: Execute or assign an atomic spec task — Developer implements and iterates through review; Scrum Master finds and assigns the next todo task one at a time.
+---
+
 # task-runner
 
 **Used by:** Developer, Scrum Master

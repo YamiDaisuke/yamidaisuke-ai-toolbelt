@@ -1,3 +1,7 @@
+---
+description: Review a completed task implementation against spec acceptance criteria and ARCHITECTURE.md conventions — produces PASS or numbered FEEDBACK.
+---
+
 # code-review
 
 **Used by:** Code Reviewer

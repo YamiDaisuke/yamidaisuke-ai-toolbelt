@@ -1,3 +1,7 @@
+---
+description: Lead a requirements interview — captures project vision, users, functional and non-functional requirements, and success criteria into docs/REQUIREMENTS.md.
+---
+
 # requirements-interview
 
 **Used by:** Architect

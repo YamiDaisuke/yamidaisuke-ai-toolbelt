@@ -1,3 +1,7 @@
+---
+description: Lead an architecture session — captures tech stack, data model, API patterns, auth, testing strategy, deployment, and conventions into docs/ARCHITECTURE.md.
+---
+
 # architecture-interview
 
 **Used by:** Architect

@@ -1,3 +1,7 @@
+---
+description: Run acceptance testing on a completed spec — verifies all task criteria and applicable requirements, produces ACCEPTED or a BUG REPORT for the Scrum Master.
+---
+
 # qa-check
 
 **Used by:** QA

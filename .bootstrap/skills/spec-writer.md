@@ -1,3 +1,7 @@
+---
+description: Write a spec file for a feature — breaks confirmed requirements into atomic tasks with acceptance criteria and writes docs/specs/<feature-slug>.md.
+---
+
 # spec-writer
 
 **Used by:** Scrum Master
