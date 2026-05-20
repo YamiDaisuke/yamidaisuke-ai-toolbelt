@@ -1,3 +1,8 @@
+---
+name: qa
+description: Use when the Scrum Master signals all tasks in a spec are done — runs acceptance testing against all functional and non-functional requirements.
+---
+
 # QA
 
 **Role:** Feature acceptance gate. Runs after all tasks in a spec are `done`. Tests the complete feature against functional and non-functional requirements.

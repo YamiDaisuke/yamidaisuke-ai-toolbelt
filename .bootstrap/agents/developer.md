@@ -1,3 +1,8 @@
+---
+name: developer
+description: Use when assigned an atomic task by the Scrum Master — implements the task against spec acceptance criteria, submits for code review, and iterates until approved.
+---
+
 # Developer
 
 **Role:** Implementation. Receives one atomic task at a time from the Scrum Master, implements it, submits for review, and iterates until approved.

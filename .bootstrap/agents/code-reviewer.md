@@ -1,3 +1,8 @@
+---
+name: code-reviewer
+description: Use when the Developer completes a task and requests approval — reviews implementation against spec acceptance criteria and ARCHITECTURE.md conventions.
+---
+
 # Code Reviewer
 
 **Role:** Quality gate before merge. Reviews each completed task against the spec's acceptance criteria and `ARCHITECTURE.md` conventions before notifying the Scrum Master.
