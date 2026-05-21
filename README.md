@@ -33,7 +33,7 @@ ym bootstrap my-project
 ```
 
 This sets up:
-- `.bootstrap/` — agent roles, skills, scripts, and templates
+- `.ym/` — agent roles, skills, scripts, and templates
 - `.claude/agents/` — agent definitions loaded by Claude Code
 - `.claude/commands/` — skill commands loaded by Claude Code
 - `docs/REQUIREMENTS.md` and `docs/ARCHITECTURE.md` — starting templates
@@ -49,7 +49,7 @@ cd existing-project
 ym bootstrap
 ```
 
-Updates `.bootstrap/`, `.claude/agents/`, and `.claude/commands/` from the latest skeleton. Your `docs/` and `CLAUDE.md` are untouched. Migration scripts run automatically to upgrade existing docs.
+Updates `.ym/`, `.claude/agents/`, and `.claude/commands/` from the latest skeleton. Your `docs/` and `CLAUDE.md` are untouched. Migration scripts run automatically to upgrade existing docs.
 
 ## What you get
 

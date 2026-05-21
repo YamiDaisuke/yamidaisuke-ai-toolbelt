@@ -87,26 +87,28 @@ Rationale: the Scrum Master owns the spec structure and ticket creation. QA shou
 
 ---
 
-### bootstrap.sh: remote install via curl
+### ym bootstrap: install via script or Homebrew
 
-**Decision:** `bootstrap.sh` is designed to be run remotely:
+**Decision:** `ym` is an installable CLI. Installation options:
 ```bash
-curl -fsSL <raw-url> | bash -s -- <project-name>
+# Via install script
+curl -fsSL .../install.sh | bash
+
+# Via Homebrew
+brew tap YamiDaisuke/yamidaisuke-ai-toolbelt && brew install --HEAD ym
 ```
 
-It clones this repo (`--depth=1`) into a temp directory, copies `.bootstrap/` into the target project, copies templates, writes `CLAUDE.md` from the template, and cleans up via `trap`.
+`ym bootstrap <project-name>` clones this repo (`--depth=1`) into a temp directory, selectively copies only the scripts and SPEC.md template into `.ym/`, copies agents to `.claude/agents/` and skills to `.claude/commands/`, writes `CLAUDE.md` from the template, and cleans up via `trap`.
 
-Rationale: simpler onboarding — no need to clone or have a local copy of the bootstrap repo. The temp dir is always cleaned up, even on failure.
-
-`.bootstrap/` is **copied** (not symlinked) into new projects so they are self-contained.
+The bootstrapped project's `.ym/` is intentionally minimal — only `scripts/` and `templates/SPEC.md`. Agents and skills live in `.claude/` where Claude Code reads them natively. `ym bootstrap` (no name) updates an existing project and re-runs any `migrate-*.sh` scripts.
 
 ---
 
-### .bootstrap/CLAUDE.md is a generic project template
+### .ym/CLAUDE.md is a generic project template
 
-**Decision:** `.bootstrap/CLAUDE.md` contains the universal behavioral guidelines (sections 1-4) plus placeholder sections for project-specific context (description, roles, phase, conventions).
+**Decision:** `.ym/CLAUDE.md` contains the universal behavioral guidelines (sections 1-4) plus placeholder sections for project-specific context (description, roles, phase, conventions).
 
-`bootstrap.sh` copies it and `sed`-replaces `{PROJECT_NAME}`. The other placeholders (`{PROJECT_DESCRIPTION}`, `{CONVENTIONS_SUMMARY}`) are filled in during the requirements and architecture sessions.
+`ym bootstrap` copies it and `sed`-replaces `{PROJECT_NAME}`. The other placeholders (`{PROJECT_DESCRIPTION}`, `{CONVENTIONS_SUMMARY}`) are filled in during the requirements and architecture sessions.
 
 The root `CLAUDE.md` (this repo) is separate — it guides Claude while building the bootstrap system itself and should not be conflated with the shipped template.
 

@@ -15,7 +15,7 @@ Formula/
 
 install.sh                    # Direct install: curl -fsSL .../install.sh | bash
 
-.bootstrap/
+.ym/                          # Source — full skeleton lives here
 ├── agents/
 │   ├── architect.md          # Role definition + system prompt
 │   ├── scrum-master.md
@@ -31,7 +31,6 @@ install.sh                    # Direct install: curl -fsSL .../install.sh | bash
 │   ├── code-review.md
 │   └── qa-check.md
 ├── scripts/
-│   ├── bootstrap.sh          # Remote install via curl, clones repo, sets up project
 │   ├── new-spec.sh           # Scaffold a new spec file
 │   ├── next-task.sh          # Print next incomplete task across specs
 │   ├── qa-report.sh          # Aggregate QA status across specs
@@ -45,7 +44,17 @@ install.sh                    # Direct install: curl -fsSL .../install.sh | bash
 
 ```
 {project-repo}/
-├── .bootstrap/               # Copied from skeleton by bootstrap.sh
+├── .ym/                      # Minimal subset — scripts + SPEC.md template only
+│   ├── scripts/
+│   │   ├── new-spec.sh
+│   │   ├── next-task.sh
+│   │   ├── qa-report.sh
+│   │   └── migrate-versioning.sh
+│   └── templates/
+│       └── SPEC.md
+├── .claude/
+│   ├── agents/               # Agent definitions — synced by ym bootstrap
+│   └── commands/             # Skill commands — synced by ym bootstrap
 ├── docs/
 │   ├── REQUIREMENTS.md       # Generated
 │   ├── ARCHITECTURE.md       # Generated
@@ -381,20 +390,6 @@ Used by QA agent. Tests a completed spec.
 
 ## Scripts
 
-### `bootstrap.sh`
-
-Remote install — downloads and applies the skeleton to a new project.
-
-```bash
-# Usage: curl -fsSL <raw-url> | bash -s -- <project-name>
-# - Clones bootstrap repo to a temp directory (cleaned up on exit)
-# - Copies .bootstrap/ into the current directory
-# - Creates docs/REQUIREMENTS.md, docs/ARCHITECTURE.md from templates
-# - Creates docs/specs/ directory
-# - Writes CLAUDE.md from template with project name substituted
-# - Initializes git if not already a repo
-```
-
 ### `new-spec.sh`
 
 ```bash
@@ -446,7 +441,7 @@ Behavioral guidelines for {PROJECT_NAME}.
 {PROJECT_DESCRIPTION}
 
 ## 6. Roles & Documents
-- Roles: .bootstrap/agents/*.md
+- Roles: .claude/agents/*.md
 - Requirements: docs/REQUIREMENTS.md
 - Architecture: docs/ARCHITECTURE.md
 - Specs: docs/specs/*.md
@@ -480,11 +475,11 @@ brew install --HEAD ym
 
 **`ym bootstrap <project-name>`** — New project
 
-Clones the skeleton, copies `.bootstrap/`, creates `docs/REQUIREMENTS.md` and `docs/ARCHITECTURE.md` from templates (with today's date substituted), syncs `.claude/agents/` and `.claude/commands/`, writes `CLAUDE.md` with the project name.
+Clones the skeleton, copies scripts and SPEC.md template into `.ym/`, creates `docs/REQUIREMENTS.md` and `docs/ARCHITECTURE.md` from templates (with today's date substituted), syncs `.claude/agents/` and `.claude/commands/`, writes `CLAUDE.md` with the project name.
 
 **`ym bootstrap`** — Update existing project
 
-Detects `.bootstrap/` in the current directory. Replaces `.bootstrap/` with the latest skeleton, re-syncs `.claude/agents/` and `.claude/commands/`, and runs all `migrate-*.sh` scripts to upgrade existing docs. Does not touch `docs/` user content or `CLAUDE.md`.
+Detects `.ym/` in the current directory. Replaces `.ym/` with the latest skeleton, re-syncs `.claude/agents/` and `.claude/commands/`, and runs all `migrate-*.sh` scripts to upgrade existing docs. Does not touch `docs/` user content or `CLAUDE.md`.
 
 ### Releasing a new version
 

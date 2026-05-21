@@ -65,10 +65,10 @@ A reusable bootstrap skeleton for spec-driven development with agent roles.
 It is not a runnable application. The deliverables are text files — markdown, bash scripts, and templates.
 
 ```
-.bootstrap/
+.ym/
 ├── agents/          # Role definitions (architect, scrum-master, developer, code-reviewer, qa)
 ├── skills/          # Skill guides used by each agent
-├── scripts/         # Bash scripts: bootstrap.sh, new-spec.sh, next-task.sh, qa-report.sh
+├── scripts/         # Bash scripts: new-spec.sh, next-task.sh, qa-report.sh, migrate-versioning.sh
 └── templates/       # Blank starting templates: REQUIREMENTS.md, ARCHITECTURE.md, SPEC.md
 
 CLAUDE.md            # This file — also the template shipped to new projects (see note below)
@@ -82,11 +82,11 @@ Do not add files not described there without explicit approval.
 This file serves two purposes:
 
 1. **Right now:** guides Claude Code while building this bootstrap repo.
-1. **When shipped:** copied into new projects via `bootstrap.sh` as their starting CLAUDE.md,
+1. **When shipped:** written into new projects by `ym bootstrap` as their starting CLAUDE.md,
    where sections 5–6 are replaced with project-specific context.
 
 Do not conflate the two. When editing this file, consider whether a change belongs here
-(bootstrap-build context) or in the shipped template (`templates/CLAUDE.md`).
+(bootstrap-build context) or in the shipped template (`.ym/CLAUDE.md`).
 
 ## 7. File Authoring Rules
 

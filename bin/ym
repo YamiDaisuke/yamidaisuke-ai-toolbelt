@@ -37,30 +37,44 @@ fetch_skeleton() {
   git clone --depth=1 --quiet "$REPO_URL" "$dest" || die "Failed to clone skeleton from $REPO_URL"
 }
 
+install_skeleton() {
+  local SRC="$1"   # path to .ym/ inside the cloned repo
+
+  # Copy only what the project needs: scripts and SPEC.md template
+  mkdir -p .ym/scripts .ym/templates
+  cp "$SRC/scripts/new-spec.sh" .ym/scripts/
+  cp "$SRC/scripts/next-task.sh" .ym/scripts/
+  cp "$SRC/scripts/qa-report.sh" .ym/scripts/
+  cp "$SRC/scripts/migrate-versioning.sh" .ym/scripts/
+  chmod +x .ym/scripts/*.sh
+
+  cp "$SRC/templates/SPEC.md" .ym/templates/
+
+  # Sync agents and skills into Claude Code directories
+  mkdir -p .claude/agents .claude/commands
+  cp "$SRC/agents/"*.md .claude/agents/
+  cp "$SRC/skills/"*.md .claude/commands/
+}
+
 cmd_bootstrap() {
   local PROJECT_NAME="$1"
   local TEMP_DIR
   TEMP_DIR=$(mktemp -d)
   trap 'rm -rf "$TEMP_DIR"' EXIT
 
-  if [ -d ".bootstrap" ]; then
+  if [ -d ".ym" ]; then
     # UPDATE MODE — project name is not used
     [ -n "$PROJECT_NAME" ] && echo "Note: project name ignored — updating existing bootstrap."
 
     fetch_skeleton "$TEMP_DIR/repo"
-    local SRC="$TEMP_DIR/repo/.bootstrap"
+    local SRC="$TEMP_DIR/repo/.ym"
 
-    echo "Updating .bootstrap/..."
-    rm -rf .bootstrap
-    cp -r "$SRC" .bootstrap
-
-    echo "Syncing .claude/agents/ and .claude/commands/..."
-    mkdir -p .claude/agents .claude/commands
-    cp .bootstrap/agents/*.md .claude/agents/
-    cp .bootstrap/skills/*.md .claude/commands/
+    echo "Updating .ym/..."
+    rm -rf .ym
+    install_skeleton "$SRC"
 
     # Run any migration scripts shipped with the new skeleton
-    for script in .bootstrap/scripts/migrate-*.sh; do
+    for script in .ym/scripts/migrate-*.sh; do
       [ -f "$script" ] || continue
       echo "Running $(basename "$script")..."
       bash "$script"
@@ -68,37 +82,34 @@ cmd_bootstrap() {
 
     echo ""
     echo "Updated:"
-    echo "  .bootstrap/"
+    echo "  .ym/"
     echo "  .claude/agents/"
     echo "  .claude/commands/"
     echo ""
     echo "Review changes: git diff"
-    echo "Commit:         git add .bootstrap .claude docs && git commit -m 'chore: update to ym v$VERSION'"
+    echo "Commit:         git add .ym .claude docs && git commit -m 'chore: update to ym v$VERSION'"
   else
     # NEW PROJECT MODE
     [ -z "$PROJECT_NAME" ] && die "project name required\nUsage: ym bootstrap <project-name>"
 
     fetch_skeleton "$TEMP_DIR/repo"
-    local SRC="$TEMP_DIR/repo/.bootstrap"
+    local SRC="$TEMP_DIR/repo/.ym"
 
     [ ! -d ".git" ] && git init --quiet
 
-    cp -r "$SRC" .bootstrap
-    mkdir -p docs/specs .claude/agents .claude/commands
+    install_skeleton "$SRC"
 
+    mkdir -p docs/specs
     local TODAY
     TODAY=$(date +%Y-%m-%d)
-    sed "s/{DATE}/$TODAY/g" .bootstrap/templates/REQUIREMENTS.md > docs/REQUIREMENTS.md
-    sed "s/{DATE}/$TODAY/g" .bootstrap/templates/ARCHITECTURE.md > docs/ARCHITECTURE.md
+    sed "s/{DATE}/$TODAY/g" "$SRC/templates/REQUIREMENTS.md" > docs/REQUIREMENTS.md
+    sed "s/{DATE}/$TODAY/g" "$SRC/templates/ARCHITECTURE.md" > docs/ARCHITECTURE.md
 
-    cp .bootstrap/agents/*.md .claude/agents/
-    cp .bootstrap/skills/*.md .claude/commands/
-
-    sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" .bootstrap/CLAUDE.md > CLAUDE.md
+    sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" "$SRC/CLAUDE.md" > CLAUDE.md
 
     echo ""
     echo "Bootstrapped: $PROJECT_NAME"
-    echo "  .bootstrap/"
+    echo "  .ym/"
     echo "  .claude/agents/"
     echo "  .claude/commands/"
     echo "  docs/REQUIREMENTS.md"

@@ -69,11 +69,11 @@ Wait for confirmation on the plan before writing any file.
 ## 6. Roles & Documents
 
 ### Roles active in this repo
-- Architect: see .bootstrap/agents/architect.md
-- Scrum Master: see .bootstrap/agents/scrum-master.md
-- Developer: see .bootstrap/agents/developer.md
-- Code Reviewer: see .bootstrap/agents/code-reviewer.md
-- QA: see .bootstrap/agents/qa.md
+- Architect: see .claude/agents/architect.md
+- Scrum Master: see .claude/agents/scrum-master.md
+- Developer: see .claude/agents/developer.md
+- Code Reviewer: see .claude/agents/code-reviewer.md
+- QA: see .claude/agents/qa.md
 
 ### Key documents
 - Requirements: docs/REQUIREMENTS.md
