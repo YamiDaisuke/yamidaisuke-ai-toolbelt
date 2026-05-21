@@ -1,0 +1,128 @@
+#!/bin/bash
+# ym — bootstrap spec-driven development projects with AI agent roles
+# https://github.com/YamiDaisuke/yamidaisuke-ai-toolbelt
+
+set -e
+
+VERSION="0.1.0"
+REPO_URL="https://github.com/YamiDaisuke/yamidaisuke-ai-toolbelt"
+
+usage() {
+  cat <<EOF
+ym v$VERSION
+
+Usage:
+  ym bootstrap <project-name>   Bootstrap a new project in the current directory
+  ym bootstrap                  Update an existing bootstrapped project
+
+Options:
+  -h, --help      Show this help
+  -v, --version   Show version
+
+Examples:
+  mkdir my-app && cd my-app && ym bootstrap my-app
+  cd existing-project && ym bootstrap
+EOF
+  exit "${1:-0}"
+}
+
+die() {
+  echo "Error: $*" >&2
+  exit 1
+}
+
+fetch_skeleton() {
+  local dest="$1"
+  echo "Fetching latest skeleton..."
+  git clone --depth=1 --quiet "$REPO_URL" "$dest" || die "Failed to clone skeleton from $REPO_URL"
+}
+
+cmd_bootstrap() {
+  local PROJECT_NAME="$1"
+  local TEMP_DIR
+  TEMP_DIR=$(mktemp -d)
+  trap 'rm -rf "$TEMP_DIR"' EXIT
+
+  if [ -d ".bootstrap" ]; then
+    # UPDATE MODE — project name is not used
+    [ -n "$PROJECT_NAME" ] && echo "Note: project name ignored — updating existing bootstrap."
+
+    fetch_skeleton "$TEMP_DIR/repo"
+    local SRC="$TEMP_DIR/repo/.bootstrap"
+
+    echo "Updating .bootstrap/..."
+    rm -rf .bootstrap
+    cp -r "$SRC" .bootstrap
+
+    echo "Syncing .claude/agents/ and .claude/commands/..."
+    mkdir -p .claude/agents .claude/commands
+    cp .bootstrap/agents/*.md .claude/agents/
+    cp .bootstrap/skills/*.md .claude/commands/
+
+    # Run any migration scripts shipped with the new skeleton
+    for script in .bootstrap/scripts/migrate-*.sh; do
+      [ -f "$script" ] || continue
+      echo "Running $(basename "$script")..."
+      bash "$script"
+    done
+
+    echo ""
+    echo "Updated:"
+    echo "  .bootstrap/"
+    echo "  .claude/agents/"
+    echo "  .claude/commands/"
+    echo ""
+    echo "Review changes: git diff"
+    echo "Commit:         git add .bootstrap .claude docs && git commit -m 'chore: update to ym v$VERSION'"
+  else
+    # NEW PROJECT MODE
+    [ -z "$PROJECT_NAME" ] && die "project name required\nUsage: ym bootstrap <project-name>"
+
+    fetch_skeleton "$TEMP_DIR/repo"
+    local SRC="$TEMP_DIR/repo/.bootstrap"
+
+    [ ! -d ".git" ] && git init --quiet
+
+    cp -r "$SRC" .bootstrap
+    mkdir -p docs/specs .claude/agents .claude/commands
+
+    local TODAY
+    TODAY=$(date +%Y-%m-%d)
+    sed "s/{DATE}/$TODAY/g" .bootstrap/templates/REQUIREMENTS.md > docs/REQUIREMENTS.md
+    sed "s/{DATE}/$TODAY/g" .bootstrap/templates/ARCHITECTURE.md > docs/ARCHITECTURE.md
+
+    cp .bootstrap/agents/*.md .claude/agents/
+    cp .bootstrap/skills/*.md .claude/commands/
+
+    sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" .bootstrap/CLAUDE.md > CLAUDE.md
+
+    echo ""
+    echo "Bootstrapped: $PROJECT_NAME"
+    echo "  .bootstrap/"
+    echo "  .claude/agents/"
+    echo "  .claude/commands/"
+    echo "  docs/REQUIREMENTS.md"
+    echo "  docs/ARCHITECTURE.md"
+    echo "  docs/specs/"
+    echo "  CLAUDE.md"
+    echo ""
+    echo "Next: open this directory in Claude Code and start with the Architect agent."
+  fi
+}
+
+case "${1:-}" in
+  bootstrap)
+    shift
+    cmd_bootstrap "${1:-}"
+    ;;
+  -v|--version)
+    echo "ym $VERSION"
+    ;;
+  -h|--help|"")
+    usage 0
+    ;;
+  *)
+    echo "Error: unknown command '$1'" >&2
+    usage 1
+    ;;
+esac

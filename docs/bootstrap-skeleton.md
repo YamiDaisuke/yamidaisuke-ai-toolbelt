@@ -7,6 +7,14 @@
 ## Directory Structure
 
 ```
+bin/
+└── ym                        # CLI — ym bootstrap <name> or ym bootstrap (update)
+
+Formula/
+└── ym.rb                     # Homebrew formula (brew tap YamiDaisuke/yamidaisuke-ai-toolbelt)
+
+install.sh                    # Direct install: curl -fsSL .../install.sh | bash
+
 .bootstrap/
 ├── agents/
 │   ├── architect.md          # Role definition + system prompt
@@ -450,6 +458,39 @@ Behavioral guidelines for {PROJECT_NAME}.
 ## 8. Definition of Done
 A task is done when all acceptance criteria pass and Code Reviewer approves.
 ```
+
+-----
+
+## CLI: ym
+
+The primary interface for using this skeleton. Installed once, used across all projects.
+
+### Installation
+
+```bash
+# Via install script
+curl -fsSL https://raw.githubusercontent.com/YamiDaisuke/yamidaisuke-ai-toolbelt/main/install.sh | bash
+
+# Via Homebrew
+brew tap YamiDaisuke/yamidaisuke-ai-toolbelt
+brew install --HEAD ym
+```
+
+### Commands
+
+**`ym bootstrap <project-name>`** — New project
+
+Clones the skeleton, copies `.bootstrap/`, creates `docs/REQUIREMENTS.md` and `docs/ARCHITECTURE.md` from templates (with today's date substituted), syncs `.claude/agents/` and `.claude/commands/`, writes `CLAUDE.md` with the project name.
+
+**`ym bootstrap`** — Update existing project
+
+Detects `.bootstrap/` in the current directory. Replaces `.bootstrap/` with the latest skeleton, re-syncs `.claude/agents/` and `.claude/commands/`, and runs all `migrate-*.sh` scripts to upgrade existing docs. Does not touch `docs/` user content or `CLAUDE.md`.
+
+### Releasing a new version
+
+1. Update `VERSION` in `bin/ym`
+2. Tag the release: `git tag v<version> && git push origin v<version>`
+3. Update `Formula/ym.rb` with the tarball URL and SHA256
 
 -----
 
