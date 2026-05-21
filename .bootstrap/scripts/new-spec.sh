@@ -27,5 +27,6 @@ if [ -f "$OUTPUT" ]; then
 fi
 
 mkdir -p docs/specs
-cp "$TEMPLATE" "$OUTPUT"
+TODAY=$(date +%Y-%m-%d)
+sed "s/{DATE}/$TODAY/g" "$TEMPLATE" > "$OUTPUT"
 echo "Created: $OUTPUT"

@@ -1,6 +1,9 @@
 # Requirements: {PROJECT_NAME}
 
+Version: v1
+
 <!-- Replace {PROJECT_NAME} with the project name -->
+<!-- Version: bump when any FR, NFR, or success criterion is added, changed, or removed. Not for typo fixes or rephrasing that preserves meaning. -->
 
 ## Project Vision & Problem Statement
 
@@ -43,3 +46,9 @@
 <!-- How will we know the project succeeded? -->
 
 - {SUCCESS_CRITERION}
+
+## Revision History
+
+| Version | Date       | Summary              |
+|---------|------------|----------------------|
+| v1      | {DATE}     | Initial requirements |

@@ -18,6 +18,7 @@
 │   ├── requirements-interview.md   # Section-by-section Q&A guide
 │   ├── architecture-interview.md
 │   ├── spec-writer.md
+│   ├── spec-amend.md               # Amend an existing spec or upstream doc
 │   ├── task-runner.md
 │   ├── code-review.md
 │   └── qa-check.md
@@ -25,7 +26,8 @@
 │   ├── bootstrap.sh          # Remote install via curl, clones repo, sets up project
 │   ├── new-spec.sh           # Scaffold a new spec file
 │   ├── next-task.sh          # Print next incomplete task across specs
-│   └── qa-report.sh          # Aggregate QA status across specs
+│   ├── qa-report.sh          # Aggregate QA status across specs
+│   └── migrate-versioning.sh # Retrofit Version header + Revision History into existing docs
 ├── templates/
 │   ├── REQUIREMENTS.md
 │   ├── ARCHITECTURE.md
@@ -59,6 +61,31 @@ Tasks use three statuses only:
 | `done` | Approved by Code Reviewer, all criteria met |
 
 Spec-level status: `draft | in-progress | done`
+
+-----
+
+## Document Versioning
+
+All three spec-driven documents carry a `Version:` field in their header.
+
+| Document | Bump when |
+|---|---|
+| `docs/specs/*.md` | Acceptance criteria, task scope, or spec requirements change |
+| `docs/REQUIREMENTS.md` | Any FR, NFR, or success criterion is added, changed, or removed |
+| `docs/ARCHITECTURE.md` | Any tech stack, data model, API, auth, or convention decision changes |
+
+Version numbers are simple integers: v1, v2, v3. Do not bump for status updates, ticket ID corrections, or rephrasing that preserves meaning. **Rule:** bump when a change would cause a Developer to implement something differently, or cause QA to re-test something already accepted.
+
+Each document has a `## Revision History` table at the bottom:
+
+```
+| Version | Date       | Summary                                      |
+|---------|------------|----------------------------------------------|
+| v1      | 2025-05-20 | Initial spec                                 |
+| v2      | 2025-06-01 | Added TASK-04; clarified AC on TASK-02       |
+```
+
+Amendments are made via the `spec-amend` skill. For existing projects created before versioning was introduced, run `migrate-versioning.sh` to retrofit the Version header and Revision History section into existing docs.
 
 -----
 
@@ -272,6 +299,27 @@ One-paragraph summary of the feature.
 
 -----
 
+### `spec-amend`
+
+Used by Scrum Master (specs) and Architect (REQUIREMENTS.md and ARCHITECTURE.md) to amend an existing document after initial writing.
+
+**When to use:** Acceptance criteria, task scope, requirements, or architecture decisions must change.
+
+**Not for:** Task status updates, ticket ID corrections, rephrasing that preserves meaning.
+
+**Process:**
+
+1. Identify the exact change and which document
+2. Confirm whether a version bump is required (rule above)
+3. Present the proposed change and Revision History summary to User — wait for confirmation
+4. Edit the document; update `Version:` field and append Revision History row if bumping
+5. Notify affected agents (Developer if in-progress tasks are affected; Scrum Master for upstream doc changes)
+6. Commit: `git add <file> && git commit -m "docs: amend <filename> to v{N} — <summary>"`
+
+One commit per amended document. Commit message summary must match the Revision History row exactly.
+
+-----
+
 ### `task-runner`
 
 Used by Developer (executing) and Scrum Master (assigning).
@@ -359,6 +407,16 @@ Remote install — downloads and applies the skeleton to a new project.
 ```bash
 # Scans all specs
 # Prints table: Spec | Tasks Done | Tasks Total | QA Status
+```
+
+### `migrate-versioning.sh`
+
+```bash
+# Usage: ./migrate-versioning.sh
+# - Adds Version: v1 header and Revision History section to existing docs
+#   that were created before spec versioning was introduced.
+# - Safe to run multiple times (skips files that already have Version:).
+# - After running, review with git diff and commit.
 ```
 
 -----

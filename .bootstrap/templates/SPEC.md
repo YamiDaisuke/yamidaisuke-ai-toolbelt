@@ -1,8 +1,10 @@
 # Spec: {FEATURE_NAME}
 
 Status: draft
+Version: v1
 
 <!-- Replace {FEATURE_NAME} with the feature name. Update Status as work progresses: draft | in-progress | done -->
+<!-- Version: bump (v2, v3...) when acceptance criteria, task scope, or requirements change. Not for status updates or ticket ID corrections. -->
 
 ## Overview
 
@@ -46,3 +48,9 @@ Status: draft
 | Task | Ticket ID |
 |------|-----------|
 | TASK-01 | {TICKET_ID} |
+
+## Revision History
+
+| Version | Date       | Summary              |
+|---------|------------|----------------------|
+| v1      | {DATE}     | Initial spec         |

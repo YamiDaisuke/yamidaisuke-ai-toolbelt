@@ -1,6 +1,9 @@
 # Architecture: {PROJECT_NAME}
 
+Version: v1
+
 <!-- Replace {PROJECT_NAME} with the project name -->
+<!-- Version: bump when tech stack, data model, API patterns, auth, or conventions change. Not for clarifying rewrites that preserve meaning. -->
 
 ## Tech Stack
 
@@ -49,3 +52,9 @@
 <!-- Naming, error handling, logging, code formatting. -->
 
 {CONVENTIONS_AND_STYLE_RULES}
+
+## Revision History
+
+| Version | Date       | Summary              |
+|---------|------------|----------------------|
+| v1      | {DATE}     | Initial architecture |
