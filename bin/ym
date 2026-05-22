@@ -51,9 +51,9 @@ install_skeleton() {
   cp "$SRC/templates/SPEC.md" .ym/templates/
 
   # Sync agents and skills into Claude Code directories
-  mkdir -p .claude/agents .claude/commands
+  mkdir -p .claude/agents .claude/commands/ym
   cp "$SRC/agents/"*.md .claude/agents/
-  cp "$SRC/skills/"*.md .claude/commands/
+  cp "$SRC/skills/ym/"*.md .claude/commands/ym/
 }
 
 cmd_bootstrap() {

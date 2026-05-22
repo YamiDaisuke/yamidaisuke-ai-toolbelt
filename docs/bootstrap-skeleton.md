@@ -23,13 +23,15 @@ install.sh                    # Direct install: curl -fsSL .../install.sh | bash
 │   ├── code-reviewer.md
 │   └── qa.md
 ├── skills/
-│   ├── requirements-interview.md   # Section-by-section Q&A guide
-│   ├── architecture-interview.md
-│   ├── spec-writer.md
-│   ├── spec-amend.md               # Amend an existing spec or upstream doc
-│   ├── task-runner.md
-│   ├── code-review.md
-│   └── qa-check.md
+│   └── ym/
+│       ├── help.md                     # Workflow overview and resume guide
+│       ├── requirements-interview.md   # Section-by-section Q&A guide
+│       ├── architecture-interview.md
+│       ├── spec-writer.md
+│       ├── spec-amend.md               # Amend an existing spec or upstream doc
+│       ├── task-runner.md
+│       ├── code-review.md
+│       └── qa-check.md
 ├── scripts/
 │   ├── new-spec.sh           # Scaffold a new spec file
 │   ├── next-task.sh          # Print next incomplete task across specs
@@ -54,7 +56,8 @@ install.sh                    # Direct install: curl -fsSL .../install.sh | bash
 │       └── SPEC.md
 ├── .claude/
 │   ├── agents/               # Agent definitions — synced by ym bootstrap
-│   └── commands/             # Skill commands — synced by ym bootstrap
+│   └── commands/
+│       └── ym/               # Skill commands — synced by ym bootstrap
 ├── docs/
 │   ├── REQUIREMENTS.md       # Generated
 │   ├── ARCHITECTURE.md       # Generated
@@ -129,7 +132,7 @@ during development.
 - Never decides for the user — flags issues, offers alternatives with tradeoffs, asks how to proceed
 - Never assigns tasks. Never writes implementation code.
 
-**Skill refs:** `requirements-interview`, `architecture-interview`
+**Skill refs:** `ym:requirements-interview`, `ym:architecture-interview`
 
 -----
 
@@ -155,7 +158,7 @@ and signals when a spec is ready for QA.
 - Never decides for the user — presents options with tradeoffs and asks
 - Never writes code. Never reviews code.
 
-**Skill refs:** `spec-writer`, `task-runner`
+**Skill refs:** `ym:spec-writer`, `ym:task-runner`
 
 -----
 
@@ -178,7 +181,7 @@ iterates through review until approved, then marks done.
 - Never makes architectural decisions — escalates to Architect if ARCHITECTURE.md doesn't cover it
 - Commits after each task. Never bundles changes from multiple tasks.
 
-**Skill refs:** `task-runner`
+**Skill refs:** `ym:task-runner`
 
 -----
 
@@ -202,7 +205,7 @@ acceptance criteria and ARCHITECTURE.md conventions.
 or `FEEDBACK` (returned to Developer with specific, actionable comments referencing
 line numbers and spec criteria).
 
-**Skill refs:** `code-review`
+**Skill refs:** `ym:code-review`
 
 -----
 
@@ -225,13 +228,21 @@ Tests the full feature against functional and non-functional requirements.
 **Output:** `ACCEPTED` (Scrum Master marks spec `done`) or `BUG REPORT`
 (sent to Scrum Master, who formats each bug as a task, adds to spec, and assigns it).
 
-**Skill refs:** `qa-check`
+**Skill refs:** `ym:qa-check`
 
 -----
 
 ## Skills
 
-### `requirements-interview`
+### `ym:help`
+
+Orients the user (or any Claude instance) to the ym workflow.
+
+**Output:** Phase table, how to check current state, resume instructions per phase, and a quick-reference table for common entry points.
+
+-----
+
+### `ym:requirements-interview`
 
 Guides the Architect through a structured requirements session.
 
@@ -271,11 +282,11 @@ REQUIREMENTS.md as input context.
 1. Deployment & environments
 1. Conventions & style rules (naming, error handling, logging)
 
-**Rules:** Same as `requirements-interview` — one section, confirm, flag concerns, write.
+**Rules:** Same as `ym:requirements-interview` — one section, confirm, flag concerns, write.
 
 -----
 
-### `spec-writer`
+### `ym:spec-writer`
 
 Used by Scrum Master to produce a spec file for one feature.
 
@@ -316,7 +327,7 @@ One-paragraph summary of the feature.
 
 -----
 
-### `spec-amend`
+### `ym:spec-amend`
 
 Used by Scrum Master (specs) and Architect (REQUIREMENTS.md and ARCHITECTURE.md) to amend an existing document after initial writing.
 
@@ -337,7 +348,7 @@ One commit per amended document. Commit message summary must match the Revision 
 
 -----
 
-### `task-runner`
+### `ym:task-runner`
 
 Used by Developer (executing) and Scrum Master (assigning).
 
@@ -358,7 +369,7 @@ Used by Developer (executing) and Scrum Master (assigning).
 
 -----
 
-### `code-review`
+### `ym:code-review`
 
 Used by Code Reviewer. Structured review against spec and architecture.
 
@@ -372,7 +383,7 @@ Used by Code Reviewer. Structured review against spec and architecture.
 
 -----
 
-### `qa-check`
+### `ym:qa-check`
 
 Used by QA agent. Tests a completed spec.
 

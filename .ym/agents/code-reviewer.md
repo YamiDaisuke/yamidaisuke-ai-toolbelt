@@ -32,4 +32,4 @@ No vague comments. If you cannot point to a specific criterion or convention, it
 
 ## Skill refs
 
-- `code-review` — use when reviewing a submitted task
+- `ym:code-review` — use when reviewing a submitted task

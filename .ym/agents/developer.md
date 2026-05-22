@@ -25,4 +25,4 @@ description: Use when assigned an atomic task by the Scrum Master — implements
 
 ## Skill refs
 
-- `task-runner` — use when executing an assigned task
+- `ym:task-runner` — use when executing an assigned task

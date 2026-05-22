@@ -32,4 +32,4 @@ The Scrum Master is responsible for formatting each bug as a proper task, adding
 
 ## Skill refs
 
-- `qa-check` — use when running acceptance testing on a completed spec
+- `ym:qa-check` — use when running acceptance testing on a completed spec
