@@ -31,7 +31,8 @@ install.sh                    # Direct install: curl -fsSL .../install.sh | bash
 │       ├── spec-amend.md               # Amend an existing spec or upstream doc
 │       ├── task-runner.md
 │       ├── code-review.md
-│       └── qa-check.md
+│       ├── qa-check.md
+│       └── bootstrap-update.md         # Safe re-bootstrap: diffs and confirms before overwriting
 ├── scripts/
 │   ├── new-spec.sh           # Scaffold a new spec file
 │   ├── next-task.sh          # Print next incomplete task across specs
@@ -411,6 +412,24 @@ Used by QA agent. Tests a completed spec.
 
 -----
 
+### `ym:bootstrap-update`
+
+Safe re-bootstrap for existing projects. Use this instead of `ym bootstrap` when the project has custom content in `CLAUDE.md` or in agent/skill files.
+
+**Inputs:** current `CLAUDE.md`, `.claude/agents/*.md`, `.claude/commands/ym/*.md`, latest skeleton (cloned fresh)
+
+**Process:**
+
+1. Clone the latest skeleton into a temp dir
+1. Overwrite `.ym/` scripts and templates silently (never user-customized)
+1. Diff `CLAUDE.md` skeleton sections (1–4, 8) against the incoming skeleton — ask for approval per changed section; flag contradictions with project-specific sections (5–7) before asking; never touch sections 5–7
+1. Diff each agent file — ask to replace / keep / skip; copy new agent files automatically
+1. Same for each skill command file
+1. Run migration scripts
+1. Print a decision summary and suggest `git diff .claude/ CLAUDE.md`
+
+-----
+
 ## Scripts
 
 ### `new-spec.sh`
@@ -502,7 +521,9 @@ Clones the skeleton, copies scripts and SPEC.md template into `.ym/`, creates `d
 
 **`ym bootstrap`** — Update existing project
 
-Detects `.ym/` in the current directory. Replaces `.ym/` with the latest skeleton, re-syncs `.claude/agents/` and `.claude/commands/`, and runs all `migrate-*.sh` scripts to upgrade existing docs. Does not touch `docs/` user content or `CLAUDE.md`.
+Detects `.ym/` in the current directory. Replaces `.ym/` scripts and templates with the latest skeleton, copies any new agent or skill files into `.claude/` (existing files are not overwritten), and runs all `migrate-*.sh` scripts to upgrade existing docs. Does not touch `docs/` user content or `CLAUDE.md`.
+
+For an interactive merge of updated agent/skill files and CLAUDE.md skeleton sections, use `/ym:bootstrap-update` in Claude Code instead.
 
 ### Releasing a new version
 
