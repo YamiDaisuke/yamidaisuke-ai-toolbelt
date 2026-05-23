@@ -40,7 +40,8 @@ install.sh                    # Direct install: curl -fsSL .../install.sh | bash
 ├── templates/
 │   ├── REQUIREMENTS.md
 │   ├── ARCHITECTURE.md
-│   └── SPEC.md
+│   ├── SPEC.md
+│   └── PULL_REQUEST_TEMPLATE.md  # Structured PR body template
 └── CLAUDE.md                 # Generic project template for Claude Code sessions
 ```
 
@@ -321,6 +322,7 @@ One-paragraph summary of the feature.
 **Rules:**
 
 - Tasks must be atomic, 1-2 hours of human dev work. Prefer more short tasks over fewer large ones.
+- Each task title must include a semantic prefix: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, or `ci`. Format: `TASK-01: feat: Add user auth endpoint`.
 - Each task has explicit, testable acceptance criteria
 - Scrum Master confirms the task list with User before writing the file
 - After writing the spec, create a ticket in the tracking system for each task and populate the Ticket Tracker table
@@ -352,13 +354,23 @@ One commit per amended document. Commit message summary must match the Revision 
 
 Used by Developer (executing) and Scrum Master (assigning).
 
+**Git workflow (Developer):**
+
+Create a fresh branch from main before starting each task:
+`git checkout main && git pull origin main && git checkout -b <prefix>/<task-slug>`
+
+Commit format: `<prefix>: <imperative summary>` — e.g., `feat: add user auth endpoint`.
+Allowed prefixes: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, `ci`.
+The prefix must match the semantic prefix in the task title.
+
 **Developer process:**
 
-1. Read the full spec and ARCHITECTURE.md
-2. Mark task `in-progress`
-3. Implement only what the acceptance criteria require
-4. Ask Code Reviewer for approval
-   - If approved → mark `done`, commit, notify Scrum Master
+1. Create a fresh branch from main
+2. Read the full spec and ARCHITECTURE.md
+3. Mark task `in-progress`
+4. Implement only what the acceptance criteria require
+5. Ask Code Reviewer for approval
+   - If approved → mark `done`, commit with semantic prefix, open PR, notify Scrum Master
    - If feedback → address comments, ask again. Repeat until approved.
 
 **Scrum Master process:**
