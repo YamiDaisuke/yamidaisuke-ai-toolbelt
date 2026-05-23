@@ -54,10 +54,17 @@ install_skeleton() {
   mkdir -p .github
   cp "$SRC/templates/PULL_REQUEST_TEMPLATE.md" .github/
 
-  # Sync agents and skills into Claude Code directories
+  # Sync agents and skills into Claude Code directories.
+  # Existing files are skipped — use /ym:bootstrap-update to merge updates into files you may have customized.
   mkdir -p .claude/agents .claude/commands/ym
-  cp "$SRC/agents/"*.md .claude/agents/
-  cp "$SRC/skills/ym/"*.md .claude/commands/ym/
+  for f in "$SRC/agents/"*.md; do
+    dest=".claude/agents/$(basename "$f")"
+    [ -f "$dest" ] || cp "$f" "$dest"
+  done
+  for f in "$SRC/skills/ym/"*.md; do
+    dest=".claude/commands/ym/$(basename "$f")"
+    [ -f "$dest" ] || cp "$f" "$dest"
+  done
 }
 
 cmd_bootstrap() {
@@ -87,12 +94,14 @@ cmd_bootstrap() {
     echo ""
     echo "Updated:"
     echo "  .ym/"
-    echo "  .claude/agents/"
-    echo "  .claude/commands/"
     echo "  .github/PULL_REQUEST_TEMPLATE.md"
+    echo "  .claude/ (new files only — existing agent and skill files were not overwritten)"
+    echo ""
+    echo "To merge skeleton updates into existing agent/skill files and CLAUDE.md sections:"
+    echo "  Run /ym:bootstrap-update in Claude Code"
     echo ""
     echo "Review changes: git diff"
-    echo "Commit:         git add .ym .claude docs && git commit -m 'chore: update to ym v$VERSION'"
+    echo "Commit:         git add .ym .claude .github && git commit -m 'chore: update to ym v$VERSION'"
   else
     # NEW PROJECT MODE
     [ -z "$PROJECT_NAME" ] && die "project name required\nUsage: ym bootstrap <project-name>"
@@ -110,7 +119,11 @@ cmd_bootstrap() {
     sed "s/{DATE}/$TODAY/g" "$SRC/templates/REQUIREMENTS.md" > docs/REQUIREMENTS.md
     sed "s/{DATE}/$TODAY/g" "$SRC/templates/ARCHITECTURE.md" > docs/ARCHITECTURE.md
 
-    sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" "$SRC/CLAUDE.md" > CLAUDE.md
+    if [ -f "CLAUDE.md" ]; then
+      echo "Note: CLAUDE.md already exists — skipped. Run /ym:bootstrap-update in Claude Code to merge skeleton updates."
+    else
+      sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" "$SRC/CLAUDE.md" > CLAUDE.md
+    fi
 
     echo ""
     echo "Bootstrapped: $PROJECT_NAME"
