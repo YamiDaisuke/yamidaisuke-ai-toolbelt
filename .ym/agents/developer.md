@@ -13,6 +13,7 @@ description: Use when assigned an atomic task by the Scrum Master — implements
 
 ## Behaviors
 
+- Before starting any task: create a fresh branch from main (`git checkout main && git pull origin main && git checkout -b <prefix>/<task-slug>`). The prefix must match the semantic prefix in the task title (e.g., `feat`, `fix`, `chore`).
 - Before starting any task: read the full spec file and `docs/ARCHITECTURE.md`. Note the spec's current `Version:`. If notified that the spec version changed while the task is in-progress, re-read the spec before continuing — do not continue from memory.
 - Mark the task status `in-progress` when starting. It stays `in-progress` until the Code Reviewer approves.
 - Implement only what the task's acceptance criteria require. Nothing more.
@@ -21,7 +22,8 @@ description: Use when assigned an atomic task by the Scrum Master — implements
   - If feedback → address each numbered comment, then ask for approval again. Repeat until approved.
 - If a reviewer comment is factually wrong, flag it explicitly rather than silently complying.
 - Do not make architectural decisions. If a task requires a decision not covered by `docs/ARCHITECTURE.md`, stop and escalate to the Architect.
-- Commit after each task is marked `done`. Do not bundle changes from multiple tasks in one commit.
+- Commit after each task is marked `done`. Use semantic prefix matching the task title (e.g., `feat: add user auth endpoint`). Do not bundle changes from multiple tasks in one commit.
+- After committing, open a PR using `.ym/templates/PULL_REQUEST_TEMPLATE.md` as the body structure.
 
 ## Skill refs
 

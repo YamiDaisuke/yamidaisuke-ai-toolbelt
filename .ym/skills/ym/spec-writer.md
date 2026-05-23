@@ -15,6 +15,8 @@ description: Write a spec file for a feature — breaks confirmed requirements i
    - Atomic: completable in one sitting, reviewable independently.
    - Concrete: each has a clear implementation target.
    - Sized to 1-2 hours of human dev work. Prefer more short tasks over fewer large ones.
+   - Titled with a semantic prefix: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, or `ci`.
+     Format: `TASK-01: feat: Add user auth endpoint`. The prefix drives the branch name and commit message.
 3. Present the task list to the User for confirmation before writing anything.
 4. For each confirmed task, write:
    - A short description
