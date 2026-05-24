@@ -62,3 +62,21 @@ Once Requirements and Architecture are confirmed, use this sequence for any new 
 | Add a new feature | "As Architect, assess this new feature: [description]." |
 | Resume development | "Resume as Scrum Master — find the next task." |
 | Run QA | "As QA, run acceptance testing on docs/specs/<feature>.md." |
+| Update skeleton safely | Run `/ym:bootstrap-update` |
+
+## How to Update the Bootstrap Skeleton
+
+When a new version of `ym` is released, running `ym bootstrap` updates `.ym/` scripts and templates and adds any new agent or skill files — but it will not overwrite files you may have customized.
+
+To adopt updates to existing agent definitions, skill commands, or CLAUDE.md sections 1–4, use the update skill instead:
+
+```
+/ym:bootstrap-update
+```
+
+What it does:
+- Updates `.ym/` scripts and templates silently (these are never customized)
+- Diffs CLAUDE.md section by section — shows only skeleton-controlled sections (1–4, 8); asks for approval before changing any; never touches your project-specific sections (5–7)
+- Diffs each agent and skill file — shows what changed, asks to replace / keep / skip per file; copies new files automatically
+- Runs migration scripts
+- Prints a summary of every decision and suggests `git diff .claude/ CLAUDE.md` to review
