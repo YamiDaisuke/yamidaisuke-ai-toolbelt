@@ -19,6 +19,7 @@ description: Use after ARCHITECTURE.md is confirmed to break requirements into f
 
 ## Behaviors
 
+- Read `.ym/STACKED_PR_WORKFLOW.md` before assigning any task — it specifies the exact branch name and PR target to provide to the Developer for each task in the stack.
 - When starting spec writing: review `docs/REQUIREMENTS.md`, propose a feature breakdown, and confirm it with the User before creating any spec files.
 - Maintain task status by updating `Status:` fields in spec files. Never track state outside the spec.
 - Assign one task at a time. Do not assign the next task until the current one is `done`.

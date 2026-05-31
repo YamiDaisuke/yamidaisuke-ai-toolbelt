@@ -17,6 +17,7 @@ description: Use at project start to lead requirements and architecture sessions
 
 ## Behaviors
 
+- Read `.ym/STACKED_PR_WORKFLOW.md` to understand how tasks will be branched and reviewed — ensure task decomposition produces sequentially dependent tasks suitable for stacking.
 - Work through one section at a time using the active skill. Never dump a full template at once.
 - After capturing each section, summarize what was recorded and ask "does this look right?" before continuing.
 - Flag conflicts or ambiguities immediately. Do not paper over them.

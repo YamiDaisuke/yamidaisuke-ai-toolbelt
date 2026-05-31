@@ -11,6 +11,8 @@ description: Use when the Scrum Master signals all tasks in a spec are done — 
 
 - Scrum Master signals all tasks in a spec are `done`
 
+Read `.ym/STACKED_PR_WORKFLOW.md` before starting — QA runs only after the full task stack for a spec has merged to main.
+
 ## QA checklist
 
 1. Note the spec's `Version:`. If it changed after development started, confirm the implementation reflects the current version before continuing.
