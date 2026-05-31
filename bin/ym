@@ -39,6 +39,8 @@ fetch_skeleton() {
 
 install_skeleton() {
   local SRC="$1"   # path to .ym/ inside the cloned repo
+  local REPO_ROOT
+  REPO_ROOT="$(dirname "$SRC")"
 
   # Copy only what the project needs: scripts and SPEC.md template
   mkdir -p .ym/scripts .ym/templates
@@ -49,10 +51,12 @@ install_skeleton() {
   chmod +x .ym/scripts/*.sh
 
   cp "$SRC/templates/SPEC.md" .ym/templates/
+  cp "$SRC/STACKED_PR_WORKFLOW.md" .ym/
 
-  # Copy PR template to GitHub default location so it applies to manual PRs
-  mkdir -p .github
+  # Copy GitHub files: PR template and restack workflow
+  mkdir -p .github/workflows
   cp "$SRC/templates/PULL_REQUEST_TEMPLATE.md" .github/
+  cp "$REPO_ROOT/.github/workflows/restack.yml" .github/workflows/
 
   # Sync agents and skills into Claude Code directories.
   # Existing files are skipped — use /ym:bootstrap-update to merge updates into files you may have customized.
@@ -95,6 +99,7 @@ cmd_bootstrap() {
     echo "Updated:"
     echo "  .ym/"
     echo "  .github/PULL_REQUEST_TEMPLATE.md"
+    echo "  .github/workflows/restack.yml"
     echo "  .claude/ (new files only — existing agent and skill files were not overwritten)"
     echo ""
     echo "To merge skeleton updates into existing agent/skill files and CLAUDE.md sections:"
@@ -131,6 +136,7 @@ cmd_bootstrap() {
     echo "  .claude/agents/"
     echo "  .claude/commands/"
     echo "  .github/PULL_REQUEST_TEMPLATE.md"
+    echo "  .github/workflows/restack.yml"
     echo "  docs/REQUIREMENTS.md"
     echo "  docs/ARCHITECTURE.md"
     echo "  docs/specs/"

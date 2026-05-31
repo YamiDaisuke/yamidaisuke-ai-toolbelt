@@ -11,6 +11,8 @@ description: Use when the Developer completes a task and requests approval — r
 
 - Developer asks for approval on a completed task
 
+Read `.ym/STACKED_PR_WORKFLOW.md` before reviewing — PRs in this repo target task branches, not main, and may have been automatically rebased since last opened.
+
 ## Review checklist
 
 1. Does the implementation satisfy every acceptance criterion in the task?

@@ -22,11 +22,14 @@ description: Safely update bootstrap files — merge skeleton changes without ov
    SRC="$TEMP/repo/.ym"
    ```
 
-2. **Update scripts and templates** (never user-customized — overwrite silently):
+2. **Update scripts, templates, and workflow files** (never user-customized — overwrite silently):
    ```bash
    cp "$SRC/scripts/"*.sh .ym/scripts/ && chmod +x .ym/scripts/*.sh
    cp "$SRC/templates/SPEC.md" .ym/templates/
+   cp "$SRC/STACKED_PR_WORKFLOW.md" .ym/
    cp "$SRC/templates/PULL_REQUEST_TEMPLATE.md" .github/
+   mkdir -p .github/workflows
+   cp "$TEMP/repo/.github/workflows/restack.yml" .github/workflows/
    ```
 
 3. **Review CLAUDE.md:**
@@ -63,7 +66,8 @@ description: Safely update bootstrap files — merge skeleton changes without ov
 
 ## Output
 
-- `.ym/` scripts and templates: always updated to latest skeleton
+- `.ym/` scripts, templates, and `STACKED_PR_WORKFLOW.md`: always updated to latest skeleton
+- `.github/workflows/restack.yml`: always updated to latest skeleton
 - `CLAUDE.md` sections 1–4 and 8: updated only with explicit per-section approval; sections 5–7 untouched
 - `.claude/agents/` and `.claude/commands/ym/`: updated per user decision for each changed file; new files added automatically
 - Console summary of every file and the decision applied to it

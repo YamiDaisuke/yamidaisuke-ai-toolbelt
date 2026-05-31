@@ -13,7 +13,8 @@ description: Use when assigned an atomic task by the Scrum Master — implements
 
 ## Behaviors
 
-- Before starting any task: create a fresh branch from main (`git checkout main && git pull origin main && git checkout -b <prefix>/<task-slug>`). The prefix must match the semantic prefix in the task title (e.g., `feat`, `fix`, `chore`).
+- Before starting any task: read `.ym/STACKED_PR_WORKFLOW.md` — branching and PR targeting in this repo differ from a standard workflow (tasks stack onto the previous task branch, not main).
+- Before starting any task: create a branch per the stacked PR convention in `.ym/STACKED_PR_WORKFLOW.md`. The branch prefix must match the semantic prefix in the task title (e.g., `feat`, `fix`, `chore`).
 - Before starting any task: read the full spec file and `docs/ARCHITECTURE.md`. Note the spec's current `Version:`. If notified that the spec version changed while the task is in-progress, re-read the spec before continuing — do not continue from memory.
 - Mark the task status `in-progress` when starting. It stays `in-progress` until the Code Reviewer approves.
 - Implement only what the task's acceptance criteria require. Nothing more.
