@@ -12,6 +12,11 @@
 
 <!-- Spec path and task ID — e.g., docs/specs/feature-auth.md · TASK-03 -->
 
+## Stack
+
+<!-- Target branch: main | spec-slug-task/NN-1-slug -->
+<!-- Upstream PR: #NNN (omit if this is task/01) -->
+
 ## Checklist
 
 - [ ] All acceptance criteria from the task are met

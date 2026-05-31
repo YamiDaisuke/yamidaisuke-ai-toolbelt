@@ -11,6 +11,32 @@ and must be implemented in order. No agent ever pushes directly to main.
 
 Task branches follow the pattern: `spec-slug-task/NN-slug` where NN is a zero-padded number, and spec-slug matches the slug of an existing spec (e.g. `login-flow-task/01-data-model`, `login-flow-task/02-api-layer`).
 
+### PR title format
+
+```
+<prefix>(<spec-slug>): <imperative summary> [task/NN]
+```
+
+- `prefix` — semantic type matching the task title: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, `ci`
+- `spec-slug` — slug of the spec file (e.g. `login-flow`)
+- `imperative summary` — what the task does, in present tense (≤ 60 chars)
+- `[task/NN]` — zero-padded task number
+
+**Examples:**
+```
+feat(login-flow): add user data model [task/01]
+feat(login-flow): implement REST API layer [task/02]
+fix(billing): correct proration rounding [task/03]
+```
+
+PR titles must be unique within a spec. Do not reuse the same summary for two tasks.
+
+### PR body
+
+Use `.ym/templates/PULL_REQUEST_TEMPLATE.md`. Fill in every section — leave no placeholder comment
+in the final body. The **Stack** section must specify the exact target branch and, for mid-stack
+PRs, link the upstream PR by number.
+
 ### What agents must never do
 
 - Push directly to main
