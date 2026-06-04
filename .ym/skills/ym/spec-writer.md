@@ -23,9 +23,9 @@ description: Write a spec file for a feature — breaks confirmed requirements i
    - Explicit, testable acceptance criteria
    - Initial status: `todo`
 5. Write the spec file to `docs/specs/<feature-slug>.md` using the SPEC template.
-6. Create a ticket in the ticket tracking system for each task. Update the Ticket Tracker table in the spec with the resulting IDs.
+6. For each confirmed task, run `tasklin add '<task-title>'`. The output is `#<hex-id> <title>` — record the hex ID in the Ticket Tracker table for that task.
 
 ## Output
 
 `docs/specs/<feature-slug>.md` populated from `.ym/templates/SPEC.md`.
-All tasks have status `todo`. Spec-level status is `draft`. Ticket Tracker table is fully populated.
+All tasks are at status `To Do` in tasklin. Spec-level status is `draft`. Ticket Tracker table is fully populated with tasklin IDs.

@@ -23,7 +23,7 @@ Read `.ym/STACKED_PR_WORKFLOW.md` before reviewing — PRs in this repo target t
 
 ## Output
 
-**PASS** — notify Developer; task is approved. Developer marks it `done` and notifies Scrum Master.
+**PASS** — notify Developer; task is approved. Developer runs `tasklin move <id> "Done"` and notifies Scrum Master.
 
 **FEEDBACK** — return to Developer with a numbered list of issues. Each issue must include:
 - File path and line number

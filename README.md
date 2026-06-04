@@ -40,6 +40,7 @@ This sets up:
 - `docs/REQUIREMENTS.md` and `docs/ARCHITECTURE.md` — starting templates
 - `docs/specs/` — directory for feature specs
 - `CLAUDE.md` — project-level behavioral guidelines
+- `.todo/` — tasklin backlog (installed automatically if not present)
 
 Then open the directory in Claude Code and start with the Architect agent.
 

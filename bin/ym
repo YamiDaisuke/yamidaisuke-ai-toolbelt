@@ -31,6 +31,23 @@ die() {
   exit 1
 }
 
+ensure_tasklin() {
+  if command -v tasklin >/dev/null 2>&1; then
+    return
+  fi
+  echo "tasklin not found — installing..."
+  if command -v brew >/dev/null 2>&1; then
+    brew tap yamidaisuke/tasklin https://github.com/yamidaisuke/tasklin
+    brew install tasklin
+  else
+    echo "Error: tasklin is required but not installed." >&2
+    echo "Install it manually:" >&2
+    echo "  brew tap yamidaisuke/tasklin https://github.com/yamidaisuke/tasklin" >&2
+    echo "  brew install tasklin" >&2
+    exit 1
+  fi
+}
+
 fetch_skeleton() {
   local dest="$1"
   echo "Fetching latest skeleton..."
@@ -76,6 +93,8 @@ cmd_bootstrap() {
   local TEMP_DIR
   TEMP_DIR=$(mktemp -d)
   trap 'rm -rf "$TEMP_DIR"' EXIT
+
+  ensure_tasklin
 
   if [ -d ".ym" ]; then
     # UPDATE MODE — project name is not used
@@ -130,6 +149,8 @@ cmd_bootstrap() {
       sed "s|{PROJECT_NAME}|$PROJECT_NAME|g" "$SRC/CLAUDE.md" > CLAUDE.md
     fi
 
+    tasklin init
+
     echo ""
     echo "Bootstrapped: $PROJECT_NAME"
     echo "  .ym/"
@@ -141,6 +162,7 @@ cmd_bootstrap() {
     echo "  docs/ARCHITECTURE.md"
     echo "  docs/specs/"
     echo "  CLAUDE.md"
+    echo "  .todo/"
     echo ""
     echo "Next: open this directory in Claude Code and start with the Architect agent."
   fi
