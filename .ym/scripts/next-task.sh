@@ -1,23 +1,22 @@
 #!/bin/bash
-# Scans all specs in docs/specs/
-# Prints the first task with status: todo
-# Format: [spec-file] TASK-XX: description
+# Prints the first To Do ticket in tasklin
+# Format: #<id> <title>
 
-SPECS_DIR="docs/specs"
+TICKETS_DIR=".todo/tickets"
 
-if [ ! -d "$SPECS_DIR" ]; then
-  echo "Error: $SPECS_DIR not found"
+if [ ! -d "$TICKETS_DIR" ]; then
+  echo "Error: .todo/tickets/ not found. Run 'tasklin init' first."
   exit 1
 fi
 
-for spec in "$SPECS_DIR"/*.md; do
-  [ -f "$spec" ] || continue
-  task=$(grep -B5 "^\*\*Status:\*\* todo" "$spec" | grep "^### TASK-" | tail -1)
-  if [ -n "$task" ]; then
-    title=$(echo "$task" | sed 's/^### //')
-    echo "[$spec] $title"
+for f in "$TICKETS_DIR"/*.yaml; do
+  [ -f "$f" ] || continue
+  if grep -q "^status: To Do" "$f"; then
+    id=$(grep "^id:" "$f" | awk '{print $2}')
+    title=$(grep "^title:" "$f" | sed "s/^title: //; s/^'//; s/'$//")
+    echo "#$id $title"
     exit 0
   fi
 done
 
-echo "No tasks with status: todo"
+echo "No tickets with status: To Do"

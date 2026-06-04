@@ -7,7 +7,7 @@ description: Run acceptance testing on a completed spec — verifies all task cr
 **Used by:** QA
 
 **Inputs:**
-- The completed spec file (all tasks `done`)
+- The completed spec file (all tasks at `Done` in tasklin)
 - `docs/REQUIREMENTS.md`
 - The codebase
 
@@ -24,14 +24,13 @@ description: Run acceptance testing on a completed spec — verifies all task cr
 ## Output
 
 **ACCEPTED**
-Notify Scrum Master to mark spec `done`.
+Notify Scrum Master to mark spec done.
 
 **BUG REPORT**
-One task stub per failure, sent to Scrum Master for formatting, ticket creation, and assignment:
+One task stub per failure, sent to Scrum Master for formatting, `tasklin add`, and assignment:
 
     ### TASK-XX: {short title}
     **Description:** What failed and why.
     **Acceptance Criteria:**
     - [ ] {the specific criterion that failed}
     **Ref:** {spec task ID or REQUIREMENTS.md item}
-    **Status:** todo
