@@ -33,9 +33,10 @@ ym bootstrap my-project
 ```
 
 This sets up:
-- `.ym/` — agent roles, skills, scripts, and templates
+- `.ym/` — scripts and templates
 - `.claude/agents/` — agent definitions loaded by Claude Code
-- `.claude/commands/` — skill commands loaded by Claude Code
+- `.claude/commands/ym/` — skill commands loaded by Claude Code
+- `.github/PULL_REQUEST_TEMPLATE.md` and `.github/workflows/restack.yml`
 - `docs/REQUIREMENTS.md` and `docs/ARCHITECTURE.md` — starting templates
 - `docs/specs/` — directory for feature specs
 - `CLAUDE.md` — project-level behavioral guidelines
@@ -49,7 +50,7 @@ cd existing-project
 ym bootstrap
 ```
 
-Updates `.ym/`, `.claude/agents/`, and `.claude/commands/` from the latest skeleton. Your `docs/` and `CLAUDE.md` are untouched. Migration scripts run automatically to upgrade existing docs.
+Fully replaces `.ym/` and `.github/` files from the latest skeleton. Adds any new agent and skill files to `.claude/` without overwriting ones you may have customized. Your `docs/` and `CLAUDE.md` are untouched. Migration scripts run automatically.
 
 ## What you get
 
